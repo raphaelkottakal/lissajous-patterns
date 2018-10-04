@@ -1,26 +1,37 @@
-
 // var stats;
-var maxLines = 32;
+var maxLines = 17;
 var rowCount = 2;
 var colCount = 2;
 var rowLines = [];
 var colLines = [];
 var delta = 0;
+var fullscreenElem = document.getElementById('full-screen-btn')
+var metaCountElem = document.getElementById('meta-count');
+metaCountElem.childNodes[1].innerHTML = rowCount;
+metaCountElem.childNodes[2].innerHTML = colCount;
+
+var iOS = /iPad|iPhone|iPod/.test(navigator.userAgent) && !window.MSStream;
+if  (iOS) {
+  fullscreenElem.style.display = 'none';
+}
 
 function setup() {
   // stats = new Stats();
   // stats.showPanel(0);
   // document.body.appendChild( stats.dom );
-  createCanvas(window.innerWidth, window.innerHeight);
+  var theSketch = createCanvas(window.innerWidth, window.innerHeight);
+  theSketch.parent('the-sketch');
   noStroke();
   fill(255, 16);
   drawRowsAndCols(rowCount, colCount);
   window.addEventListener('resize', onResize);
+  document.getElementById('full-screen-btn').addEventListener('click', makeFullScreen);
 }
 
 function draw() {
   // stats.begin();
   background(10, 100, 190);
+  // background(0);
   moveRowShapesInArray(rowLines);
   moveColShapesInArray(colLines);
   drawShapesFromArray(rowLines);
@@ -45,6 +56,7 @@ function moveColShapesInArray(array) {
 
 function drawShapesFromArray(array) {
   for(var i = 0; i < array.length; i += 2) {
+    // fill(array[i].color);
     beginShape();
     vertex(array[i].a.x, array[i].a.y);
     vertex(array[i].b.x, array[i].b.y);
@@ -75,7 +87,8 @@ function drawRowsAndCols(rows, cols)  {
     };
     var theLine = {
       a: startPoint,
-      b: endPoint
+      b: endPoint,
+      // color: color(random(255), random(255), random(255), random(32, 128))
     }
     rowLines[i] = theLine;
   }
@@ -91,26 +104,32 @@ function drawRowsAndCols(rows, cols)  {
     };
     var theLine = {
       a: startPoint,
-      b: endPoint
+      b: endPoint,
+      // color: color(random(255), random(255), random(255), random(32, 128))
     }
     colLines[i] = theLine;
   }
+  showMetaCount();
+
 }
-function mouseClicked() {
+
+function showMetaCount() {
+  metaCountElem
+  var newMetaCountElem = metaCountElem.cloneNode(true);
+  newMetaCountElem.childNodes[1].innerHTML = rowCount;
+  newMetaCountElem.childNodes[2].innerHTML = colCount;
+  metaCountElem.parentNode.replaceChild(newMetaCountElem, metaCountElem);
+  metaCountElem = newMetaCountElem;
+}
+
+function mouseClicked(e) {
+  if (e.target.tagName === 'IMG') {
+    return;
+  }
   delta = 0;
   var rowLineCount = parseInt(map(mouseY, 0, height, 0, maxLines), 10);
   var colLineCount = parseInt(map(mouseX, 0, width, 0, maxLines), 10);
   drawRowsAndCols(rowLineCount, colLineCount);
-  var elem = canvas;
-  if (elem.requestFullscreen) {
-    elem.elem();
-  } else if (elem.mozRequestFullScreen) { /* Firefox */
-    elem.mozRequestFullScreen();
-  } else if (elem.webkitRequestFullscreen) { /* Chrome, Safari and Opera */
-    elem.webkitRequestFullscreen();
-  } else if (elem.msRequestFullscreen) { /* IE/Edge */
-    elem.msRequestFullscreen();
-  }
 }
 
 
@@ -125,3 +144,16 @@ function onResize() {
   resizeCanvas(window.innerWidth, window.innerHeight);
   drawRowsAndCols(rowCount, colCount);
 };
+
+function makeFullScreen(e) {
+  var elem = document.getElementById('the-sketch');
+  if (elem.requestFullscreen) {
+    elem.elem();
+  } else if (elem.mozRequestFullScreen) { /* Firefox */
+    elem.mozRequestFullScreen();
+  } else if (elem.webkitRequestFullscreen) { /* Chrome, Safari and Opera */
+    elem.webkitRequestFullscreen();
+  } else if (elem.msRequestFullscreen) { /* IE/Edge */
+    elem.msRequestFullscreen();
+  }
+}

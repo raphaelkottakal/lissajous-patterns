@@ -1,8 +1,60 @@
 html, body {
   margin: 0;
   padding: 0;
+  font-family: sans-serif;
 }
 
 canvas {
   display: block;
+}
+
+img {
+  max-width: 100%;
+}
+
+#full-screen-btn {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  padding-right: 8px;
+  padding-bottom: 8px;
+  width: 32px;
+}
+
+#meta-count {
+  position: fixed;
+  bottom: 16%;
+  width: 100%;
+  text-align: center;
+  color: white;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  font-size: 11px;
+}
+
+#row-count, #col-count {
+  background: hsla(0, 0%, 100%, 0.16);
+  color: white;
+  font-size: 32px;
+  padding: 16px;
+  margin: 8px;
+  border-radius: 50%;
+  /* line-height: 100%; */
+  width: 40px;
+  height: 40px;
+  display: inline-block;
+}
+
+.fadeout {
+  opacity: 0;
+  animation: fadeout 3s;
+}
+
+@keyframes fadeout {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
 }
